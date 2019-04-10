@@ -9,10 +9,11 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
+import imagework.AnimPanel;
 import imagework.ImagePanel;
 
 public class GUI {
-	private JFrame frame;
+	public static JFrame frame;
 	private ImagePanel intro;
 	private ImagePanel introMenu;
 	private int width;
@@ -24,7 +25,7 @@ public class GUI {
 		addIntroMenu();
 		addMenuButton();
 		addAuthoButton();
-		
+//		
 		frame.repaint();
 	}
 	private void setContent(JPanel to) {
@@ -140,16 +141,17 @@ public class GUI {
 		
 		
 		intro = new ImagePanel();
-		intro.setLayout(null);
-	
 		try {
 			intro.setImage(ImageIO.read(new File("./img/intro/bg.jpg")));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		intro.setLayout(null);
+	
 		setContent(intro);
 		frame.setVisible(true);
+		
 		width = intro.getWidth();
 		height = intro.getHeight();
 	}
