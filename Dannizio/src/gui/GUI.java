@@ -11,6 +11,9 @@ import javax.swing.*;
 
 import imagework.AnimPanel;
 import imagework.ImagePanel;
+import imagework.MyPF;
+import imagework.MyTF;
+import imagework.PhotosDB;
 
 public class GUI {
 	public static JFrame frame;
@@ -20,12 +23,18 @@ public class GUI {
 	private int height;
 	private ImagePanel menu;
 	private ImagePanel autho;
+	private ImagePanel sign_inP;
+	private ImagePanel sign_inArea;
+	private MyTF login;
+	private MyPF pass;
+	
+	private ImagePanel sumbit_sign_in;
 	public GUI() {
 		init();
 		addIntroMenu();
 		addMenuButton();
 		addAuthoButton();
-//		
+		initSign_in();
 		frame.repaint();
 	}
 	private void setContent(JPanel to) {
@@ -76,6 +85,38 @@ public class GUI {
 		introMenu.add(menu);
 		
 	}
+	private void initSign_in(){
+		sign_inP = new ImagePanel();
+		sign_inP.setImage(PhotosDB.getPhoto("main_bg"));
+		sign_inP.setBounds(0, 0, width, height);
+		sign_inP.setLayout(null);
+		sign_inArea = new ImagePanel();
+		int w=300,h=250;
+		int x=(width-w)/2,y=(height-h)/2;
+		sign_inArea.setBounds(x,y,w,h);
+		sign_inArea.setBackground(Color.RED);
+		sign_inArea.setLayout(null);
+		
+		int margin_left=15;
+		int margin_top=15;
+		int margin_right=15;
+		int h1=30;
+		login = new MyTF();
+		login.setBorder(BorderFactory.createEmptyBorder());
+		login.setBackground(new Color(0,0,0,0));
+		login.setLocation(margin_left, margin_top);
+		login.setSize(w-margin_left-margin_right,h1);
+		
+		pass= new MyPF();
+		pass.setEchoChar('*');
+		pass.setLocation(margin_left, 2*margin_top+login.getHeight());
+		pass.setBorder(BorderFactory.createEmptyBorder());
+		pass.setSize(w-margin_left-margin_right,h1);
+		pass.setBackground(new Color(0,0,0,0));
+		sign_inArea.add(login);
+		sign_inArea.add(pass);
+		sign_inP.add(sign_inArea);
+	}
 	private void addAuthoButton() {
 		autho = new ImagePanel();
 		final int margin_left=10;
@@ -97,7 +138,7 @@ public class GUI {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+				setContent(sign_inP);
 			}
 			
 			@Override
@@ -114,7 +155,7 @@ public class GUI {
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				// TODO Auto-generated method stub
+				
 				
 			}
 		});
@@ -141,12 +182,8 @@ public class GUI {
 		
 		
 		intro = new ImagePanel();
-		try {
-			intro.setImage(ImageIO.read(new File("./img/intro/bg.jpg")));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		PhotosDB.upload("./img/intro/bg.jpg", "main_bg");
+		intro.setImage(PhotosDB.getPhoto("main_bg"));
 		intro.setLayout(null);
 	
 		setContent(intro);
