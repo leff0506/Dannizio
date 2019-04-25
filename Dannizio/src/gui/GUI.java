@@ -9,6 +9,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
+import client.Client;
 import imagework.AnimPanel;
 import imagework.ImagePanel;
 import imagework.MyPF;
@@ -21,28 +22,49 @@ public class GUI {
 	private ImagePanel introMenu;
 	private int width;
 	private int height;
+	//gl area
 	private ImagePanel menu;
 	private ImagePanel autho;
+	//	
+	
+	//sign_in area
 	private ImagePanel sign_inP;
 	private ImagePanel sign_inArea;
 	private MyTF login;
 	private MyPF pass;
+	private ImagePanel submit_sign_in;
+	//	
 	
-	private ImagePanel sumbit_sign_in;
+	
+	//sign_up area
+	private ImagePanel sign_upP;
+	private ImagePanel sign_upArea;
+	private MyTF loginUp;
+	private MyPF passUp;
+	private MyPF passRepUp;
+	private Client client;
+	private ImagePanel submit_sign_up;
+	//
 	public GUI() {
+		createClient();
 		init();
 		addIntroMenu();
-		addMenuButton();
+		addSignInButton();
 		addAuthoButton();
 		initSign_in();
+		initSign_up();
 		frame.repaint();
+		
+	}
+	private void createClient() {
+		client = new Client("localhost",7777,this);
 	}
 	private void setContent(JPanel to) {
 		
 		frame.setContentPane(to);
 		frame.repaint();
 	}
-	private void addMenuButton() {
+	private void addSignInButton() {
 		menu = new ImagePanel();
 		final int margin_left=10;
 		final int margin_top=10;
@@ -63,7 +85,7 @@ public class GUI {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+				setContent(sign_upP);
 			}
 			
 			@Override
@@ -113,9 +135,136 @@ public class GUI {
 		pass.setBorder(BorderFactory.createEmptyBorder());
 		pass.setSize(w-margin_left-margin_right,h1);
 		pass.setBackground(new Color(0,0,0,0));
+		
+		
+		submit_sign_in = new ImagePanel();
+		submit_sign_in.setSize(80,50);
+		submit_sign_in.setLocation(sign_inArea.getWidth()-submit_sign_in.getWidth(), sign_inArea.getHeight()-submit_sign_in.getHeight());
+		PhotosDB.upload("./img/gl/submit.png", "submit");
+		submit_sign_in.setImage(PhotosDB.getPhoto("submit"));
+		submit_sign_in.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				String query = "sign_in{login:"+login.getText()+",password:"+pass.getText()+"}";
+				client.send(query);
+				pass.setText("");
+				login.setText("");
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		sign_inArea.add(submit_sign_in);
 		sign_inArea.add(login);
 		sign_inArea.add(pass);
 		sign_inP.add(sign_inArea);
+	}
+	private void initSign_up(){
+		sign_upP = new ImagePanel();
+		sign_upP.setImage(PhotosDB.getPhoto("main_bg"));
+		sign_upP.setBounds(0, 0, width, height);
+		sign_upP.setLayout(null);
+		sign_upArea = new ImagePanel();
+		int w=300,h=250;
+		int x=(width-w)/2,y=(height-h)/2;
+		sign_upArea.setBounds(x,y,w,h);
+		sign_upArea.setBackground(Color.RED);
+		sign_upArea.setLayout(null);
+		
+		int margin_left=15;
+		int margin_top=15;
+		int margin_right=15;
+		int h1=30;
+		loginUp = new MyTF();
+		loginUp.setBorder(BorderFactory.createEmptyBorder());
+		loginUp.setBackground(new Color(0,0,0,0));
+		loginUp.setLocation(margin_left, margin_top);
+		loginUp.setSize(w-margin_left-margin_right,h1);
+		
+		passUp= new MyPF();
+		passUp.setEchoChar('*');
+		passUp.setLocation(margin_left, 2*margin_top+login.getHeight());
+		passUp.setBorder(BorderFactory.createEmptyBorder());
+		passUp.setSize(w-margin_left-margin_right,h1);
+		passUp.setBackground(new Color(0,0,0,0));
+		
+		passRepUp= new MyPF();
+		passRepUp.setEchoChar('*');
+		passRepUp.setLocation(margin_left, 3*margin_top+login.getHeight()+pass.getHeight());
+		passRepUp.setBorder(BorderFactory.createEmptyBorder());
+		passRepUp.setSize(w-margin_left-margin_right,h1);
+		passRepUp.setBackground(new Color(0,0,0,0));
+		
+		submit_sign_up = new ImagePanel();
+		submit_sign_up.setSize(80,50);
+		submit_sign_up.setLocation(sign_upArea.getWidth()-submit_sign_up.getWidth(), sign_upArea.getHeight()-submit_sign_up.getHeight());
+		PhotosDB.upload("./img/gl/submit.png", "submit");
+		submit_sign_up.setImage(PhotosDB.getPhoto("submit"));
+		submit_sign_up.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				if(passUp.getText().equals(passRepUp.getText())) {
+					String query = "sign_up{login:"+loginUp.getText()+",password:"+passUp.getText()+"}";
+					client.send(query);
+					passUp.setText("");
+					passRepUp.setText("");
+					loginUp.setText("");
+				}
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		sign_upArea.add(submit_sign_up);
+		sign_upArea.add(loginUp);
+		sign_upArea.add(passUp);
+		sign_upArea.add(passRepUp);
+		sign_upP.add(sign_upArea);
 	}
 	private void addAuthoButton() {
 		autho = new ImagePanel();

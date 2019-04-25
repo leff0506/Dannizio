@@ -32,8 +32,11 @@ public class Conn implements Runnable{
 		while(isAlive) {
 			try {
 				input = client.in().readLine();
-				ui.log(client.getSocket().getInetAddress()+" : "+input);
-				command(input);
+				if(input!=null) {
+					ui.log(client.getSocket().getInetAddress()+" : "+input);
+					command(input);
+				}
+				
 			}catch(java.net.SocketException e) {
 				isAlive=false;
 				ui.log("out: "+client.getSocket().getLocalAddress().toString());
@@ -47,7 +50,39 @@ public class Conn implements Runnable{
 		parser.setInput(str);
 		if(parser.getName().equals("sign_in")) {
 			signIn(parser);
+		}else if(parser.getName().equals("sign_up")) {
+			sign_up(parser);
 		}
+	}
+	private void sign_up(XMLParser parser) {
+		try {
+			String query ="INSERT INTO users(login,password) VALUES ('"+parser.get("login")+"','"+parser.get("password")+"')";
+			try {
+				ResultSet res = dbh.getSt().executeQuery("SELECT * from `users` where login ='"+parser.get("login")+"'");
+				if(res.next()) {
+					send("Error");
+					return ;
+				}
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+			try {
+				dbh.getSt().execute(query);
+				
+				send("New record inserted");
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				send("Error with SQL");
+				e.printStackTrace();
+			}
+			
+		}catch(NullPointerException e) {
+			e.printStackTrace();
+			send("Error!!!");
+		}
+		
 	}
 	private void signIn(XMLParser parser) {
 		String query ="SELECT * from users where login = '"+parser.get("login")+"' and password = '"+parser.get("password")+"'";

@@ -7,24 +7,52 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+import javax.swing.JOptionPane;
+
+import gui.GUI;
+
 public class Client {
 	private Socket socket;
 	private BufferedReader in;
 	private PrintWriter out;
-	public Client(String ip,int port) {
-		
+	private GUI gui;
+	public Client(String ip,int port,GUI gui) {
+		this.gui=gui;
 		try {
 			socket = new Socket(ip,port);
 			in=new BufferedReader(new InputStreamReader(socket.getInputStream(),"utf-8"));
 			out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()),true);
-			
+			Thread th = new Thread(new Runnable() {
+				
+				@Override
+				public void run() {
+					String input;
+					while(true) {
+						try {
+							input = in.readLine();
+							
+							if(input!=null) {
+								JOptionPane.showMessageDialog(null,input);
+								command(input);
+							}
+						}catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+					
+				}
+			});
+			th.start();
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		
 	}
-
+	public void command(String com) {
+		
+	}
 	public BufferedReader in() {
 		return in;
 	}
