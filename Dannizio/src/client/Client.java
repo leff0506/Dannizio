@@ -10,13 +10,17 @@ import java.net.Socket;
 import javax.swing.JOptionPane;
 
 import gui.GUI;
+import parser.XMLParser;
 
 public class Client {
 	private Socket socket;
 	private BufferedReader in;
 	private PrintWriter out;
 	private GUI gui;
+	private XMLParser parser;
 	public Client(String ip,int port,GUI gui) {
+		parser = new XMLParser();
+		
 		this.gui=gui;
 		try {
 			socket = new Socket(ip,port);
@@ -31,9 +35,11 @@ public class Client {
 						try {
 							input = in.readLine();
 							
-							if(input!=null) {
-								JOptionPane.showMessageDialog(null,input);
-								command(input);
+							if(input!=null) { 
+									
+								parser.setInput(input);
+								JOptionPane.showMessageDialog(null,parser.getName());
+								command();
 							}
 						}catch (IOException e) {
 							// TODO Auto-generated catch block
@@ -50,7 +56,11 @@ public class Client {
 		}
 		
 	}
-	public void command(String com) {
+	public void command() {
+		
+		if(parser.getName().equals("logged")) {
+			GUI.workPlace();
+		}
 		
 	}
 	public BufferedReader in() {

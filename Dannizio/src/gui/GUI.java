@@ -1,6 +1,8 @@
 package gui;
 
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
@@ -18,63 +20,76 @@ import imagework.PhotosDB;
 
 public class GUI {
 	public static JFrame frame;
-	private ImagePanel intro;
-	private ImagePanel introMenu;
-	private int width;
-	private int height;
-	//gl area
-	private ImagePanel menu;
-	private ImagePanel autho;
+
+	private static int width;
+	private static int height;
+	//gl worker area
+	private static ImagePanel sign_up_Worker;
+	private static ImagePanel sign_in_Worker;
+	private static ImagePanel workerP;
+	private static ImagePanel menuWorker;
+	private static ImagePanel worker_back;
 	//	
 	
 	//sign_in area
-	private ImagePanel sign_inP;
-	private ImagePanel sign_inArea;
-	private MyTF login;
-	private MyPF pass;
-	private ImagePanel submit_sign_in;
+	private static ImagePanel sign_inP;
+	private static ImagePanel sign_inArea;
+	private static MyTF login;
+	private static MyPF pass;
+	private static ImagePanel sign_in_submit;
+	private static ImagePanel sign_in_back;
 	//	
 	
 	
 	//sign_up area
-	private ImagePanel sign_upP;
-	private ImagePanel sign_upArea;
-	private MyTF loginUp;
-	private MyPF passUp;
-	private MyPF passRepUp;
-	private Client client;
-	private ImagePanel submit_sign_up;
+	private static ImagePanel sign_upP;
+	private static ImagePanel sign_upArea;
+	private static MyTF loginUp;
+	private static MyPF passUp;
+	private static MyPF passRepUp;
+	private static Client client;
+	private static ImagePanel sign_up_submit;
+	private static ImagePanel sign_up_back;
+	//
+	
+	//gl  area
+	private static ImagePanel gl;
+	private static ImagePanel gl_user;
+	private static ImagePanel gl_worker;
+	//
+	
+	//worker lace
+	public static ImagePanel workPlace;
+	public static ImagePanel workPlace_back;
+	//
+	
+	
+	//bounds
+	private static int back_width = 100;
+	private static int back_height = 50;
 	//
 	public GUI() {
+		uploadPhotos();
 		createClient();
 		init();
-		addIntroMenu();
-		addSignInButton();
-		addAuthoButton();
+		initGl();
+		initWorker();
 		initSign_in();
 		initSign_up();
+		setContent(gl);
 		frame.repaint();
 		
 	}
-	private void createClient() {
-		client = new Client("localhost",7777,this);
-	}
-	private void setContent(JPanel to) {
+	public static void workPlace() {
+		workPlace = new ImagePanel();
+		workPlace.setBounds(0,0,width,height);
+		workPlace.setImage(PhotosDB.getPhoto("main_bg"));
+		workPlace.setLayout(null);
 		
-		frame.setContentPane(to);
-		frame.repaint();
-	}
-	private void addSignInButton() {
-		menu = new ImagePanel();
-		final int margin_left=10;
-		final int margin_top=10;
-		final int margin_right=10;
-		final int widthAutho=introMenu.getWidth()-margin_left-margin_right;
-		final int heightAutho=50;
-		menu.setBackground(new Color(0,255,0));
-		menu.setSize(widthAutho,heightAutho);
-		menu.setLocation(margin_left,margin_top);
-		menu.addMouseListener(new MouseListener() {
+		workPlace_back = new ImagePanel();
+		workPlace_back.setBounds(0,0,back_width,back_height);
+		workPlace_back.setImage(PhotosDB.getPhoto("back"));
+		workPlace_back.addMouseListener(new MouseListener() {
 			
 			@Override
 			public void mouseReleased(MouseEvent e) {
@@ -84,29 +99,95 @@ public class GUI {
 			
 			@Override
 			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-				setContent(sign_upP);
+				setContent(gl);
+				
 			}
 			
 			@Override
 			public void mouseExited(MouseEvent e) {
-				menu.setBackground(new Color(0,255,0));
+				// TODO Auto-generated method stub
 				
 			}
 			
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				menu.setBackground(new Color(0,255,255));
+				// TODO Auto-generated method stub
 				
 			}
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
 			}
 		});
-		introMenu.add(menu);
+		workPlace.add(workPlace_back);
 		
+		setContent(workPlace);
 	}
+//	public static void updateWorkPlace() {
+//		
+//	}
+	private void createClient() {
+		client = new Client("localhost",7777,this);
+	}
+	public static void setContent(JPanel to) {
+		
+		frame.setContentPane(to);
+		frame.repaint();
+	}
+	private void initGl() {
+		gl = new ImagePanel();
+		gl.setBounds(0,0,width,height);
+		gl.setImage(PhotosDB.getPhoto("main_bg"));
+		gl.setLayout(null);
+		
+		gl_user =new ImagePanel();
+		gl_user.setSize(100,50);
+		gl_user.setLocation(width/2 - gl_user.getWidth()-50,height/2 - gl_user.getHeight()/2);
+		
+		gl_user.setImage(PhotosDB.getPhoto("user"));
+		gl.add(gl_user);
+		
+		gl_worker =new ImagePanel();
+		gl_worker.setSize(100,50);
+		gl_worker.setLocation(width/2 +50,height/2 - gl_worker.getHeight()/2);
+		gl_worker.setImage(PhotosDB.getPhoto("user"));
+		gl_worker.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				setContent(workerP);
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		gl.add(gl_worker);
+	}
+
 	private void initSign_in(){
 		sign_inP = new ImagePanel();
 		sign_inP.setImage(PhotosDB.getPhoto("main_bg"));
@@ -137,12 +218,12 @@ public class GUI {
 		pass.setBackground(new Color(0,0,0,0));
 		
 		
-		submit_sign_in = new ImagePanel();
-		submit_sign_in.setSize(80,50);
-		submit_sign_in.setLocation(sign_inArea.getWidth()-submit_sign_in.getWidth(), sign_inArea.getHeight()-submit_sign_in.getHeight());
-		PhotosDB.upload("./img/gl/submit.png", "submit");
-		submit_sign_in.setImage(PhotosDB.getPhoto("submit"));
-		submit_sign_in.addMouseListener(new MouseListener() {
+		sign_in_submit = new ImagePanel();
+		sign_in_submit.setSize(80,50);
+		sign_in_submit.setLocation(sign_inArea.getWidth()-sign_in_submit.getWidth(), sign_inArea.getHeight()-sign_in_submit.getHeight());
+		
+		sign_in_submit.setImage(PhotosDB.getPhoto("submit"));
+		sign_in_submit.addMouseListener(new MouseListener() {
 			
 			@Override
 			public void mouseReleased(MouseEvent e) {
@@ -176,9 +257,57 @@ public class GUI {
 				
 			}
 		});
-		sign_inArea.add(submit_sign_in);
+		pass.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String query = "sign_in{login:"+login.getText()+",password:"+pass.getText()+"}";
+				client.send(query);
+				pass.setText("");
+				login.setText("");
+				
+			}
+		});
+		sign_in_back = new ImagePanel();
+		sign_in_back.setBounds(0,0,back_width,back_height);
+		sign_in_back.setImage(PhotosDB.getPhoto("back"));
+		sign_in_back.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				setContent(workerP);
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
+		sign_inArea.add(sign_in_submit);
 		sign_inArea.add(login);
 		sign_inArea.add(pass);
+		sign_inP.add(sign_in_back);
 		sign_inP.add(sign_inArea);
 	}
 	private void initSign_up(){
@@ -217,12 +346,12 @@ public class GUI {
 		passRepUp.setSize(w-margin_left-margin_right,h1);
 		passRepUp.setBackground(new Color(0,0,0,0));
 		
-		submit_sign_up = new ImagePanel();
-		submit_sign_up.setSize(80,50);
-		submit_sign_up.setLocation(sign_upArea.getWidth()-submit_sign_up.getWidth(), sign_upArea.getHeight()-submit_sign_up.getHeight());
-		PhotosDB.upload("./img/gl/submit.png", "submit");
-		submit_sign_up.setImage(PhotosDB.getPhoto("submit"));
-		submit_sign_up.addMouseListener(new MouseListener() {
+		sign_up_submit = new ImagePanel();
+		sign_up_submit.setSize(80,50);
+		sign_up_submit.setLocation(sign_upArea.getWidth()-sign_up_submit.getWidth(), sign_upArea.getHeight()-sign_up_submit.getHeight());
+		
+		sign_up_submit.setImage(PhotosDB.getPhoto("submit"));
+		sign_up_submit.addMouseListener(new MouseListener() {
 			
 			@Override
 			public void mouseReleased(MouseEvent e) {
@@ -260,23 +389,10 @@ public class GUI {
 				
 			}
 		});
-		sign_upArea.add(submit_sign_up);
-		sign_upArea.add(loginUp);
-		sign_upArea.add(passUp);
-		sign_upArea.add(passRepUp);
-		sign_upP.add(sign_upArea);
-	}
-	private void addAuthoButton() {
-		autho = new ImagePanel();
-		final int margin_left=10;
-		final int margin_top=10+menu.getHeight()+menu.getY();
-		final int margin_right=10;
-		final int widthAutho=introMenu.getWidth()-margin_left-margin_right;
-		final int heightAutho=50;
-		autho.setBackground(new Color(0,255,0));
-		autho.setSize(widthAutho,heightAutho);
-		autho.setLocation(margin_left,margin_top);
-		autho.addMouseListener(new MouseListener() {
+		sign_up_back = new ImagePanel();
+		sign_up_back.setBounds(0,0,back_width,back_height);
+		sign_up_back.setImage(PhotosDB.getPhoto("back"));
+		sign_up_back.addMouseListener(new MouseListener() {
 			
 			@Override
 			public void mouseReleased(MouseEvent e) {
@@ -286,40 +402,37 @@ public class GUI {
 			
 			@Override
 			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-				setContent(sign_inP);
+				setContent(workerP);
+				
 			}
 			
 			@Override
 			public void mouseExited(MouseEvent e) {
-				autho.setBackground(new Color(0,255,0));
+				// TODO Auto-generated method stub
 				
 			}
 			
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				autho.setBackground(new Color(0,255,255));
+				// TODO Auto-generated method stub
 				
 			}
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				
+				// TODO Auto-generated method stub
 				
 			}
 		});
-		introMenu.add(autho);
 		
+		sign_upArea.add(sign_up_submit);
+		sign_upArea.add(loginUp);
+		sign_upArea.add(passUp);
+		sign_upArea.add(passRepUp);
+		sign_upP.add(sign_upArea);
+		sign_upP.add(sign_up_back);
 	}
-	private void addIntroMenu() {
-		introMenu = new ImagePanel();
-		introMenu.setLayout(null);
-		introMenu.setSize(200,400);
-		introMenu.setLocation(0,height-introMenu.getHeight()-40);
-		introMenu.setBackground(new Color(250, 0, 0, 150));
-		intro.add(introMenu);
-		
-	}
+
 	private void init() {
 		frame = new JFrame("Dannizio");
 		frame.setSize(900,600);
@@ -330,15 +443,166 @@ public class GUI {
 		
 		
 		
-		intro = new ImagePanel();
-		PhotosDB.upload("./img/intro/bg.jpg", "main_bg");
-		intro.setImage(PhotosDB.getPhoto("main_bg"));
-		intro.setLayout(null);
+		ImagePanel p = new ImagePanel();
+		p.setLayout(null);
 	
-		setContent(intro);
+		setContent(p);
+		
 		frame.setVisible(true);
 		
-		width = intro.getWidth();
-		height = intro.getHeight();
+		width = p.getWidth();
+		height = p.getHeight();
+	}
+	private void initWorker() {
+		workerP = new ImagePanel();
+		workerP.setBounds(0,0,width,height);
+		workerP.setImage(PhotosDB.getPhoto("main_bg"));
+		workerP.setLayout(null);
+		
+		menuWorker = new ImagePanel();
+		menuWorker.setLayout(null);
+		menuWorker.setSize(200,400);
+		menuWorker.setLocation(0,height-menuWorker.getHeight()-40);
+		menuWorker.setBackground(new Color(250, 0, 0, 150));
+		workerP.add(menuWorker);
+		
+		
+		
+	
+		
+		sign_in_Worker = new ImagePanel();
+		{
+			int margin_left=10;
+			int margin_top=10;
+			int margin_right=10;
+			int widthAutho=menuWorker.getWidth()-margin_left-margin_right;
+			int heightAutho=50;
+			
+			sign_in_Worker.setBackground(new Color(0,255,0));
+			sign_in_Worker.setSize(widthAutho,heightAutho);
+			sign_in_Worker.setLocation(margin_left,margin_top);
+			sign_in_Worker.addMouseListener(new MouseListener() {
+				
+				@Override
+				public void mouseReleased(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mousePressed(MouseEvent e) {
+					// TODO Auto-generated method stub
+					sign_in_Worker.setBackground(new Color(0,255,0));
+					setContent(sign_inP);
+					
+				}
+				
+				@Override
+				public void mouseExited(MouseEvent e) {
+					sign_in_Worker.setBackground(new Color(0,255,0));
+					
+				}
+				
+				@Override
+				public void mouseEntered(MouseEvent e) {
+					sign_in_Worker.setBackground(new Color(0,255,255));
+					
+				}
+				
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					
+					
+				}
+			});
+		}
+		sign_up_Worker = new ImagePanel();
+		{
+			int margin_left=10;
+			int margin_top=10+sign_in_Worker.getHeight()+sign_in_Worker.getY();
+			int margin_right=10;
+			int widthAutho=menuWorker.getWidth()-margin_left-margin_right;
+			int heightAutho=50;
+			sign_up_Worker.setBackground(new Color(0,255,0));
+			sign_up_Worker.setSize(widthAutho,heightAutho);
+			sign_up_Worker.setLocation(margin_left,margin_top);
+			sign_up_Worker.addMouseListener(new MouseListener() {
+				
+				@Override
+				public void mouseReleased(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mousePressed(MouseEvent e) {
+					// TODO Auto-generated method stub
+					setContent(sign_upP);
+					sign_up_Worker.setBackground(new Color(0,255,0));
+				}
+				
+				@Override
+				public void mouseExited(MouseEvent e) {
+					sign_up_Worker.setBackground(new Color(0,255,0));
+					
+				}
+				
+				@Override
+				public void mouseEntered(MouseEvent e) {
+					sign_up_Worker.setBackground(new Color(0,255,255));
+					
+				}
+				
+				@Override
+				public void mouseClicked(MouseEvent e) {
+				}
+			});
+			menuWorker.add(sign_up_Worker);
+		}
+		worker_back  = new ImagePanel();
+		worker_back.setBounds(0,0,back_width,back_height);
+		worker_back.setImage(PhotosDB.getPhoto("back"));
+		worker_back.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				setContent(gl);
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		menuWorker.add(sign_in_Worker);
+		workerP.add(worker_back);
+		
+		
+	}
+	private void uploadPhotos() {
+		PhotosDB.upload("./img/intro/bg.jpg", "main_bg");
+		PhotosDB.upload("./img/gl/submit.png", "submit");
+		PhotosDB.upload("./img/gl/user.png", "user");
+		PhotosDB.upload("./img/gl/back.png", "back");
 	}
 }
