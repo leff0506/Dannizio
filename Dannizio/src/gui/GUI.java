@@ -24,8 +24,8 @@ public class GUI {
 	private static int width;
 	private static int height;
 	//gl worker area
-	private static ImagePanel sign_up_Worker;
-	private static ImagePanel sign_in_Worker;
+	private static ImagePanel button_sign_up_Worker;
+	private static ImagePanel button_sign_in_Worker;
 	private static ImagePanel workerP;
 	private static ImagePanel menuWorker;
 	private static ImagePanel worker_back;
@@ -36,7 +36,7 @@ public class GUI {
 	private static ImagePanel sign_inArea;
 	private static MyTF login;
 	private static MyPF pass;
-	private static ImagePanel sign_in_submit;
+	private static ImagePanel button_sign_in_submit;
 	private static ImagePanel sign_in_back;
 	//	
 	
@@ -48,21 +48,27 @@ public class GUI {
 	private static MyPF passUp;
 	private static MyPF passRepUp;
 	private static Client client;
-	private static ImagePanel sign_up_submit;
+	private static ImagePanel button_sign_up_submit;
 	private static ImagePanel sign_up_back;
 	//
 	
 	//gl  area
-	private static ImagePanel gl;
+	private static ImagePanel glP;
 	private static ImagePanel gl_user;
 	private static ImagePanel gl_worker;
 	//
 	
-	//worker lace
-	public static ImagePanel workPlace;
-	public static ImagePanel workPlace_back;
+	//worker place
+	private static ImagePanel workPlaceP;
+	private static ImagePanel workPlace_back;
+	private static ImagePanel menu_area_workPlace;
+	private static ImagePanel button_addToMenu;
 	//
 	
+	//add to menu area
+	private static ImagePanel addToMenuP;
+	private static ImagePanel addToMenu_back;
+	//
 	
 	//bounds
 	private static int back_width = 100;
@@ -76,15 +82,16 @@ public class GUI {
 		initWorker();
 		initSign_in();
 		initSign_up();
-		setContent(gl);
+		setContent(glP);
 		frame.repaint();
 		
 	}
 	public static void workPlace() {
-		workPlace = new ImagePanel();
-		workPlace.setBounds(0,0,width,height);
-		workPlace.setImage(PhotosDB.getPhoto("main_bg"));
-		workPlace.setLayout(null);
+		initAddToMenuArea();
+		workPlaceP = new ImagePanel();
+		workPlaceP.setBounds(0,0,width,height);
+		workPlaceP.setImage(PhotosDB.getPhoto("main_bg"));
+		workPlaceP.setLayout(null);
 		
 		workPlace_back = new ImagePanel();
 		workPlace_back.setBounds(0,0,back_width,back_height);
@@ -99,7 +106,7 @@ public class GUI {
 			
 			@Override
 			public void mousePressed(MouseEvent e) {
-				setContent(gl);
+				setContent(glP);
 				
 			}
 			
@@ -121,9 +128,103 @@ public class GUI {
 				
 			}
 		});
-		workPlace.add(workPlace_back);
+		menu_area_workPlace = new ImagePanel();
+		menu_area_workPlace.setSize(300,400);
+		menu_area_workPlace.setLocation(width/2-menu_area_workPlace.getWidth()/2,height/2-menu_area_workPlace.getHeight()/2);
+		menu_area_workPlace.setBackground(new Color(255,0,0,200));
+		menu_area_workPlace.setLayout(null);
 		
-		setContent(workPlace);
+		button_addToMenu  = new ImagePanel();
+		int margin_left=10;
+		int margin_top=10;
+		int margin_right=10;
+		int widthAutho=menu_area_workPlace.getWidth()-margin_left-margin_right;
+		int heightAutho=50;
+		button_addToMenu.setBounds(margin_left,margin_top,widthAutho,heightAutho);
+		button_addToMenu.setBackground(new Color(0,255,0));
+		button_addToMenu.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				button_addToMenu.setBackground(new Color(0,255,0));
+				setContent(addToMenuP);
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				button_addToMenu.setBackground(new Color(0,255,0));
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				button_addToMenu.setBackground(new Color(0,255,255));
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		menu_area_workPlace.add(button_addToMenu);
+		workPlaceP.add(menu_area_workPlace);
+		workPlaceP.add(workPlace_back);
+		
+		setContent(workPlaceP);
+	}
+	private static void initAddToMenuArea() {
+		addToMenuP = new ImagePanel();
+		addToMenuP.setLayout(null);
+		addToMenuP.setBounds(0,0,width,height);
+		addToMenuP.setImage(PhotosDB.getPhoto("main_bg"));
+		
+		
+		addToMenu_back = new ImagePanel();
+		addToMenu_back.setBounds(0,0,back_width,back_height);
+		addToMenu_back.setImage(PhotosDB.getPhoto("back"));
+		addToMenu_back.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				setContent(workPlaceP);
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		addToMenuP.add(addToMenu_back);
+		
 	}
 //	public static void updateWorkPlace() {
 //		
@@ -137,17 +238,17 @@ public class GUI {
 		frame.repaint();
 	}
 	private void initGl() {
-		gl = new ImagePanel();
-		gl.setBounds(0,0,width,height);
-		gl.setImage(PhotosDB.getPhoto("main_bg"));
-		gl.setLayout(null);
+		glP = new ImagePanel();
+		glP.setBounds(0,0,width,height);
+		glP.setImage(PhotosDB.getPhoto("main_bg"));
+		glP.setLayout(null);
 		
 		gl_user =new ImagePanel();
 		gl_user.setSize(100,50);
 		gl_user.setLocation(width/2 - gl_user.getWidth()-50,height/2 - gl_user.getHeight()/2);
 		
 		gl_user.setImage(PhotosDB.getPhoto("user"));
-		gl.add(gl_user);
+		glP.add(gl_user);
 		
 		gl_worker =new ImagePanel();
 		gl_worker.setSize(100,50);
@@ -185,7 +286,7 @@ public class GUI {
 				
 			}
 		});
-		gl.add(gl_worker);
+		glP.add(gl_worker);
 	}
 
 	private void initSign_in(){
@@ -218,12 +319,12 @@ public class GUI {
 		pass.setBackground(new Color(0,0,0,0));
 		
 		
-		sign_in_submit = new ImagePanel();
-		sign_in_submit.setSize(80,50);
-		sign_in_submit.setLocation(sign_inArea.getWidth()-sign_in_submit.getWidth(), sign_inArea.getHeight()-sign_in_submit.getHeight());
+		button_sign_in_submit = new ImagePanel();
+		button_sign_in_submit.setSize(80,50);
+		button_sign_in_submit.setLocation(sign_inArea.getWidth()-button_sign_in_submit.getWidth(), sign_inArea.getHeight()-button_sign_in_submit.getHeight());
 		
-		sign_in_submit.setImage(PhotosDB.getPhoto("submit"));
-		sign_in_submit.addMouseListener(new MouseListener() {
+		button_sign_in_submit.setImage(PhotosDB.getPhoto("submit"));
+		button_sign_in_submit.addMouseListener(new MouseListener() {
 			
 			@Override
 			public void mouseReleased(MouseEvent e) {
@@ -304,7 +405,7 @@ public class GUI {
 			}
 		});
 		
-		sign_inArea.add(sign_in_submit);
+		sign_inArea.add(button_sign_in_submit);
 		sign_inArea.add(login);
 		sign_inArea.add(pass);
 		sign_inP.add(sign_in_back);
@@ -346,12 +447,12 @@ public class GUI {
 		passRepUp.setSize(w-margin_left-margin_right,h1);
 		passRepUp.setBackground(new Color(0,0,0,0));
 		
-		sign_up_submit = new ImagePanel();
-		sign_up_submit.setSize(80,50);
-		sign_up_submit.setLocation(sign_upArea.getWidth()-sign_up_submit.getWidth(), sign_upArea.getHeight()-sign_up_submit.getHeight());
+		button_sign_up_submit = new ImagePanel();
+		button_sign_up_submit.setSize(80,50);
+		button_sign_up_submit.setLocation(sign_upArea.getWidth()-button_sign_up_submit.getWidth(), sign_upArea.getHeight()-button_sign_up_submit.getHeight());
 		
-		sign_up_submit.setImage(PhotosDB.getPhoto("submit"));
-		sign_up_submit.addMouseListener(new MouseListener() {
+		button_sign_up_submit.setImage(PhotosDB.getPhoto("submit"));
+		button_sign_up_submit.addMouseListener(new MouseListener() {
 			
 			@Override
 			public void mouseReleased(MouseEvent e) {
@@ -425,7 +526,7 @@ public class GUI {
 			}
 		});
 		
-		sign_upArea.add(sign_up_submit);
+		sign_upArea.add(button_sign_up_submit);
 		sign_upArea.add(loginUp);
 		sign_upArea.add(passUp);
 		sign_upArea.add(passRepUp);
@@ -470,7 +571,7 @@ public class GUI {
 		
 	
 		
-		sign_in_Worker = new ImagePanel();
+		button_sign_in_Worker = new ImagePanel();
 		{
 			int margin_left=10;
 			int margin_top=10;
@@ -478,10 +579,10 @@ public class GUI {
 			int widthAutho=menuWorker.getWidth()-margin_left-margin_right;
 			int heightAutho=50;
 			
-			sign_in_Worker.setBackground(new Color(0,255,0));
-			sign_in_Worker.setSize(widthAutho,heightAutho);
-			sign_in_Worker.setLocation(margin_left,margin_top);
-			sign_in_Worker.addMouseListener(new MouseListener() {
+			button_sign_in_Worker.setBackground(new Color(0,255,0));
+			button_sign_in_Worker.setSize(widthAutho,heightAutho);
+			button_sign_in_Worker.setLocation(margin_left,margin_top);
+			button_sign_in_Worker.addMouseListener(new MouseListener() {
 				
 				@Override
 				public void mouseReleased(MouseEvent e) {
@@ -492,20 +593,20 @@ public class GUI {
 				@Override
 				public void mousePressed(MouseEvent e) {
 					// TODO Auto-generated method stub
-					sign_in_Worker.setBackground(new Color(0,255,0));
+					button_sign_in_Worker.setBackground(new Color(0,255,0));
 					setContent(sign_inP);
 					
 				}
 				
 				@Override
 				public void mouseExited(MouseEvent e) {
-					sign_in_Worker.setBackground(new Color(0,255,0));
+					button_sign_in_Worker.setBackground(new Color(0,255,0));
 					
 				}
 				
 				@Override
 				public void mouseEntered(MouseEvent e) {
-					sign_in_Worker.setBackground(new Color(0,255,255));
+					button_sign_in_Worker.setBackground(new Color(0,255,255));
 					
 				}
 				
@@ -516,17 +617,17 @@ public class GUI {
 				}
 			});
 		}
-		sign_up_Worker = new ImagePanel();
+		button_sign_up_Worker = new ImagePanel();
 		{
 			int margin_left=10;
-			int margin_top=10+sign_in_Worker.getHeight()+sign_in_Worker.getY();
+			int margin_top=10+button_sign_in_Worker.getHeight()+button_sign_in_Worker.getY();
 			int margin_right=10;
 			int widthAutho=menuWorker.getWidth()-margin_left-margin_right;
 			int heightAutho=50;
-			sign_up_Worker.setBackground(new Color(0,255,0));
-			sign_up_Worker.setSize(widthAutho,heightAutho);
-			sign_up_Worker.setLocation(margin_left,margin_top);
-			sign_up_Worker.addMouseListener(new MouseListener() {
+			button_sign_up_Worker.setBackground(new Color(0,255,0));
+			button_sign_up_Worker.setSize(widthAutho,heightAutho);
+			button_sign_up_Worker.setLocation(margin_left,margin_top);
+			button_sign_up_Worker.addMouseListener(new MouseListener() {
 				
 				@Override
 				public void mouseReleased(MouseEvent e) {
@@ -538,18 +639,18 @@ public class GUI {
 				public void mousePressed(MouseEvent e) {
 					// TODO Auto-generated method stub
 					setContent(sign_upP);
-					sign_up_Worker.setBackground(new Color(0,255,0));
+					button_sign_up_Worker.setBackground(new Color(0,255,0));
 				}
 				
 				@Override
 				public void mouseExited(MouseEvent e) {
-					sign_up_Worker.setBackground(new Color(0,255,0));
+					button_sign_up_Worker.setBackground(new Color(0,255,0));
 					
 				}
 				
 				@Override
 				public void mouseEntered(MouseEvent e) {
-					sign_up_Worker.setBackground(new Color(0,255,255));
+					button_sign_up_Worker.setBackground(new Color(0,255,255));
 					
 				}
 				
@@ -557,7 +658,7 @@ public class GUI {
 				public void mouseClicked(MouseEvent e) {
 				}
 			});
-			menuWorker.add(sign_up_Worker);
+			menuWorker.add(button_sign_up_Worker);
 		}
 		worker_back  = new ImagePanel();
 		worker_back.setBounds(0,0,back_width,back_height);
@@ -572,7 +673,7 @@ public class GUI {
 			
 			@Override
 			public void mousePressed(MouseEvent e) {
-				setContent(gl);
+				setContent(glP);
 				
 			}
 			
@@ -594,7 +695,7 @@ public class GUI {
 				
 			}
 		});
-		menuWorker.add(sign_in_Worker);
+		menuWorker.add(button_sign_in_Worker);
 		workerP.add(worker_back);
 		
 		

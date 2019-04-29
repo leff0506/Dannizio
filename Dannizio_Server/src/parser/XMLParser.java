@@ -21,6 +21,10 @@ public class XMLParser {
 		int i = 0;
 		while(i<input.length()&&input.charAt(i++)!='{');
 		name = new String(input.toCharArray(),0,i-1);
+		if(i==input.length()) {
+			name = input;
+			return;
+		}
 		input = input.replaceFirst(name, "");
 		input = input.replaceFirst("\\{","");
 		input = input.replaceFirst("\\}","");
@@ -36,6 +40,7 @@ public class XMLParser {
 				
 			}
 		}
+		
 		
 	}
 	private void show() {
