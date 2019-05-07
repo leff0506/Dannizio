@@ -4,6 +4,7 @@ import java.awt.Color;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 
 public class UI {
@@ -11,7 +12,7 @@ public class UI {
 	private JPanel panel;
 	private int width;
 	private int height;
-	private JTextPane text;
+	private JTextArea text;
 	public UI() {
 		
 		frame = new JFrame("Fishka_Server");
@@ -28,8 +29,10 @@ public class UI {
 		
 		width = panel.getWidth();
 		height = panel.getHeight();
-		text = new JTextPane();
+		text = new JTextArea();
 		text.setEditable(false);
+		text.setEditable(false);
+		text.setAutoscrolls(true);
 		text.setBounds(20,20,width-40,height-40);
 		panel.add(text);
 		frame.repaint();

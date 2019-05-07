@@ -1,10 +1,12 @@
 package gui;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.font.*;
 import java.io.File;
 import java.io.IOException;
 
@@ -18,6 +20,7 @@ import imagework.MyPF;
 import imagework.MyTF;
 import imagework.PhotosDB;
 
+
 public class GUI {
 	public static JFrame frame;
 
@@ -26,6 +29,8 @@ public class GUI {
 	//gl worker area
 	private static ImagePanel button_sign_up_Worker;
 	private static ImagePanel button_sign_in_Worker;
+	private	static JLabel sign_in_label;
+	private	static JLabel sign_up_label;
 	private static ImagePanel workerP;
 	private static ImagePanel menuWorker;
 	private static ImagePanel worker_back;
@@ -38,6 +43,8 @@ public class GUI {
 	private static MyPF pass;
 	private static ImagePanel button_sign_in_submit;
 	private static ImagePanel sign_in_back;
+	private static JLabel login_label_in;
+	private static JLabel password_label_in;
 	//	
 	
 	
@@ -50,12 +57,16 @@ public class GUI {
 	private static Client client;
 	private static ImagePanel button_sign_up_submit;
 	private static ImagePanel sign_up_back;
+	private static JLabel login_label_up;
+	private static JLabel password_label_up;
 	//
 	
 	//gl  area
 	private static ImagePanel glP;
 	private static ImagePanel gl_user;
 	private static ImagePanel gl_worker;
+	private static JLabel worker_label;
+	private static JLabel user_label;
 	//
 	
 	//worker place
@@ -63,11 +74,22 @@ public class GUI {
 	private static ImagePanel workPlace_back;
 	private static ImagePanel menu_area_workPlace;
 	private static ImagePanel button_addToMenu;
+	private static JLabel add_toMenu_label;
 	//
 	
 	//add to menu area
 	private static ImagePanel addToMenuP;
 	private static ImagePanel addToMenu_back;
+	private static ImagePanel addToMenuArea;
+	private static JTextField titleField; 
+	private static JTextField sizeField; 
+	private static JTextArea descriptionField; 
+	private static JCheckBox availableField; 
+	private static ImagePanel button_addToMenu_submit;
+	private static JLabel title_label;
+	private static JLabel description_label;
+	private static JLabel size_label;
+	private static JLabel available_label;
 	//
 	
 	//bounds
@@ -140,6 +162,9 @@ public class GUI {
 		int margin_right=10;
 		int widthAutho=menu_area_workPlace.getWidth()-margin_left-margin_right;
 		int heightAutho=50;
+		add_toMenu_label = new JLabel("add_to_menu");
+		add_toMenu_label.setBounds(10,5,90,20);
+		button_addToMenu.add(add_toMenu_label);
 		button_addToMenu.setBounds(margin_left,margin_top,widthAutho,heightAutho);
 		button_addToMenu.setBackground(new Color(0,255,0));
 		button_addToMenu.addMouseListener(new MouseListener() {
@@ -223,12 +248,123 @@ public class GUI {
 				
 			}
 		});
+		addToMenuArea = new ImagePanel();
+		addToMenuArea.setSize(600,400);
+		addToMenuArea.setLocation(width/2-addToMenuArea.getWidth()/2,height/2-addToMenuArea.getHeight()/2);
+		addToMenuArea.setBackground(new Color(255,0,0,200));
+		addToMenuArea.setLayout(null);
+		
+		title_label = new JLabel("Title");
+		title_label.setBounds(20,40,70,20);
+		
+		titleField = new JTextField();
+		titleField.setBounds(20,60,200,40);
+		titleField.setHorizontalAlignment(JTextField.CENTER);
+		
+		size_label = new JLabel("Size");
+		size_label.setBounds(20,180,70,20);
+		
+		sizeField = new JTextField();
+		sizeField.setBounds(20,200,200,40);
+		sizeField.setHorizontalAlignment(JTextField.CENTER);
+
+		description_label = new JLabel("Description");
+		description_label.setBounds(300,40,70,20);
+		
+		descriptionField = new JTextArea();
+		descriptionField.setBounds(300,60,250,260);
+		descriptionField.setLineWrap(true);
+		descriptionField.setWrapStyleWord(true);
+		
+		
+		available_label = new JLabel("Available");
+		available_label.setBounds(45,300,70,20);
+		
+		availableField = new JCheckBox();
+		availableField.setBounds(20,300,20,20);
+		
+		
+		
+		button_addToMenu_submit = new ImagePanel();
+		button_addToMenu_submit.setSize(80,40);
+		button_addToMenu_submit.setLocation(addToMenuArea.getWidth()-button_addToMenu_submit.getWidth()-20, addToMenuArea.getHeight()-button_addToMenu_submit.getHeight()-20);
+		button_addToMenu_submit.setImage(PhotosDB.getPhoto("submit"));
+//		button_addToMenu_submit.setBackground(Color.green);
+		button_addToMenu_submit.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				String title = titleField.getText();
+				titleField.setText("");
+				
+				String size = sizeField.getText();
+				sizeField.setText("");
+				
+				String descr = descriptionField.getText();
+				descriptionField.setText("");
+				
+				boolean av = availableField.isSelected();
+				availableField.setSelected(false);
+				
+				addToMenuQuery(title,size,av,descr);
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
+		
+		addToMenuArea.add(titleField);
+		addToMenuArea.add(sizeField);
+		addToMenuArea.add(descriptionField);
+		addToMenuArea.add(availableField);
+		addToMenuArea.add(button_addToMenu_submit);
+		addToMenuArea.add(title_label);
+		addToMenuArea.add(description_label);
+		addToMenuArea.add(size_label);
+		addToMenuArea.add(available_label);
+		
+		
+		addToMenuP.add(addToMenuArea);
 		addToMenuP.add(addToMenu_back);
 		
 	}
 //	public static void updateWorkPlace() {
 //		
 //	}
+	private static void addToMenuQuery(String title,String size, boolean available,String descr) {
+		String query = "add_to_menu{";
+		query +="title:"+title+",";
+		query +="size:"+size+",";
+		query +="available:"+available+",";
+		query +="description:"+descr;
+		query+="}";
+		client.send(query);
+		
+		
+	}
 	private void createClient() {
 		client = new Client("localhost",7777,this);
 	}
@@ -243,12 +379,20 @@ public class GUI {
 		glP.setImage(PhotosDB.getPhoto("main_bg"));
 		glP.setLayout(null);
 		
+		
+		
 		gl_user =new ImagePanel();
 		gl_user.setSize(100,50);
 		gl_user.setLocation(width/2 - gl_user.getWidth()-50,height/2 - gl_user.getHeight()/2);
-		
 		gl_user.setImage(PhotosDB.getPhoto("user"));
-		glP.add(gl_user);
+		
+		user_label = new JLabel("User");
+		user_label.setFont(new Font("Serif", Font.BOLD, 12));
+		user_label.setForeground(Color.black);
+		
+		user_label.setBounds(width/2 - gl_user.getWidth()-50,height/2 - gl_user.getHeight()/2 ,60,30);
+		
+		
 		
 		gl_worker =new ImagePanel();
 		gl_worker.setSize(100,50);
@@ -286,6 +430,15 @@ public class GUI {
 				
 			}
 		});
+		worker_label = new JLabel("Worker");
+		worker_label.setFont(new Font("Serif", Font.BOLD, 12));
+		worker_label.setForeground(Color.black);
+		worker_label.setBounds(width/2 +50,height/2 - gl_worker.getHeight()/2,50,20);
+		
+		
+		glP.add(worker_label);
+		glP.add(user_label);
+		glP.add(gl_user);
 		glP.add(gl_worker);
 	}
 
@@ -302,18 +455,24 @@ public class GUI {
 		sign_inArea.setLayout(null);
 		
 		int margin_left=15;
-		int margin_top=15;
+		int margin_top=30;
 		int margin_right=15;
 		int h1=30;
+		
+		login_label_in = new JLabel("login");
+		login_label_in.setBounds(margin_left, margin_top-20,50,20);
+		
 		login = new MyTF();
 		login.setBorder(BorderFactory.createEmptyBorder());
 		login.setBackground(new Color(0,0,0,0));
 		login.setLocation(margin_left, margin_top);
 		login.setSize(w-margin_left-margin_right,h1);
 		
+		password_label_in = new JLabel("password");
+		password_label_in.setBounds(margin_left, 2*margin_top+login.getHeight()+10,70,20);
 		pass= new MyPF();
 		pass.setEchoChar('*');
-		pass.setLocation(margin_left, 2*margin_top+login.getHeight());
+		pass.setLocation(margin_left, 2*margin_top+login.getHeight()+30);
 		pass.setBorder(BorderFactory.createEmptyBorder());
 		pass.setSize(w-margin_left-margin_right,h1);
 		pass.setBackground(new Color(0,0,0,0));
@@ -404,7 +563,8 @@ public class GUI {
 				
 			}
 		});
-		
+		sign_inArea.add(password_label_in);
+		sign_inArea.add(login_label_in);
 		sign_inArea.add(button_sign_in_submit);
 		sign_inArea.add(login);
 		sign_inArea.add(pass);
@@ -424,25 +584,31 @@ public class GUI {
 		sign_upArea.setLayout(null);
 		
 		int margin_left=15;
-		int margin_top=15;
+		int margin_top=25;
 		int margin_right=15;
 		int h1=30;
+		login_label_up = new JLabel("login");
+		login_label_up.setBounds(margin_left, h1-20,50,20);
+		
 		loginUp = new MyTF();
 		loginUp.setBorder(BorderFactory.createEmptyBorder());
 		loginUp.setBackground(new Color(0,0,0,0));
 		loginUp.setLocation(margin_left, margin_top);
 		loginUp.setSize(w-margin_left-margin_right,h1);
 		
+		password_label_up = new JLabel("passwords");
+		password_label_up.setBounds(margin_left, 2*margin_top+login.getHeight()+10,70,20);
+		
 		passUp= new MyPF();
 		passUp.setEchoChar('*');
-		passUp.setLocation(margin_left, 2*margin_top+login.getHeight());
+		passUp.setLocation(margin_left, 2*margin_top+login.getHeight()+30);
 		passUp.setBorder(BorderFactory.createEmptyBorder());
 		passUp.setSize(w-margin_left-margin_right,h1);
 		passUp.setBackground(new Color(0,0,0,0));
 		
 		passRepUp= new MyPF();
 		passRepUp.setEchoChar('*');
-		passRepUp.setLocation(margin_left, 3*margin_top+login.getHeight()+pass.getHeight());
+		passRepUp.setLocation(margin_left, 3*margin_top+login.getHeight()+pass.getHeight()+10);
 		passRepUp.setBorder(BorderFactory.createEmptyBorder());
 		passRepUp.setSize(w-margin_left-margin_right,h1);
 		passRepUp.setBackground(new Color(0,0,0,0));
@@ -525,7 +691,8 @@ public class GUI {
 				
 			}
 		});
-		
+		sign_upArea.add(login_label_up);
+		sign_upArea.add(password_label_up);
 		sign_upArea.add(button_sign_up_submit);
 		sign_upArea.add(loginUp);
 		sign_upArea.add(passUp);
@@ -569,7 +736,7 @@ public class GUI {
 		
 		
 		
-	
+		
 		
 		button_sign_in_Worker = new ImagePanel();
 		{
@@ -617,6 +784,9 @@ public class GUI {
 				}
 			});
 		}
+		sign_in_label=new JLabel("Sign_in");
+		sign_in_label.setBounds(40,5,50,20);
+		button_sign_in_Worker.add(sign_in_label);
 		button_sign_up_Worker = new ImagePanel();
 		{
 			int margin_left=10;
@@ -660,6 +830,9 @@ public class GUI {
 			});
 			menuWorker.add(button_sign_up_Worker);
 		}
+		sign_up_label=new JLabel("Sign_up");
+		sign_up_label.setBounds(40,5,50,20);
+		button_sign_up_Worker.add(sign_up_label);
 		worker_back  = new ImagePanel();
 		worker_back.setBounds(0,0,back_width,back_height);
 		worker_back.setImage(PhotosDB.getPhoto("back"));

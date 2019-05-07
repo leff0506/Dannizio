@@ -52,6 +52,26 @@ public class Conn implements Runnable{
 			signIn(parser);
 		}else if(parser.getName().equals("sign_up")) {
 			sign_up(parser);
+		}else if(parser.getName().equals("add_to_menu")) {
+			addToMenu(parser);
+		}
+	}
+	private void addToMenu(XMLParser parser) {
+		try {
+			String query ="INSERT INTO menu(title,available,size,description) VALUES ('"+parser.get("title")+"','"+(parser.get("available").equals("true")?1:0)+"','"+parser.get("size")+"','"+parser.get("description")+"')";
+			try {
+				dbh.getSt().execute(query);
+				
+				send("New record inserted");
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				send("Error with SQL");
+				e.printStackTrace();
+			}
+			
+		}catch(NullPointerException e) {
+			e.printStackTrace();
+			send("Error!!!");
 		}
 	}
 	private void sign_up(XMLParser parser) {
