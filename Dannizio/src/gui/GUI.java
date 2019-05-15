@@ -1,7 +1,9 @@
 package gui;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -9,6 +11,8 @@ import java.awt.event.MouseListener;
 import java.awt.font.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -19,9 +23,12 @@ import imagework.ImagePanel;
 import imagework.MyPF;
 import imagework.MyTF;
 import imagework.PhotosDB;
+import parser.Pizza;
 
 
 public class GUI {
+	
+	
 	public static JFrame frame;
 
 	private static int width;
@@ -69,15 +76,38 @@ public class GUI {
 	private static JLabel user_label;
 	//
 	
+	//user place
+	private static ImagePanel userPlaceP;
+	private static ImagePanel userPlace_back;
+	private static ImagePanel menu_area_userPlace;
+	private static ImagePanel button_seeMenu;
+	private static JLabel seeMenu_label;
+	private static ImagePanel button_basket;
+	private static JLabel basket_label;
+	//
+	
+	//menu place
+	public static ImagePanel menuPlaceP;
+	private static ImagePanel menu_back;
+	private static ImagePanel menu_area;
+	public static ArrayList<Pizza> pizzas=new ArrayList<>();
+	private static final int HEIGHT_PIZZA=150;
+	private static JScrollPane menu_area_s;
+	private static int curPizza=0;
+	private static ImagePanel next_button;
+	//
+	
 	//worker place
 	private static ImagePanel workPlaceP;
 	private static ImagePanel workPlace_back;
 	private static ImagePanel menu_area_workPlace;
 	private static ImagePanel button_addToMenu;
 	private static JLabel add_toMenu_label;
+	private static ImagePanel button_manageOrders;
+	private static JLabel manageOrders_label;
 	//
 	
-	//add to menu area
+	//add to (add to menu area) :)
 	private static ImagePanel addToMenuP;
 	private static ImagePanel addToMenu_back;
 	private static ImagePanel addToMenuArea;
@@ -104,10 +134,340 @@ public class GUI {
 		initWorker();
 		initSign_in();
 		initSign_up();
+		initUser();
 		setContent(glP);
 		frame.repaint();
 		
 	}
+	public static void initMenuArea() {
+		menuPlaceP = new ImagePanel();
+		menuPlaceP.setBounds(0,0,width,height);
+		menuPlaceP.setImage(PhotosDB.getPhoto("main_bg"));
+		menuPlaceP.setLayout(null);
+		
+		menu_back = new ImagePanel();
+		menu_back.setBounds(0,0,back_width,back_height);
+		menu_back.setImage(PhotosDB.getPhoto("back"));
+		
+		menu_back.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				setContent(userPlaceP);
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
+
+		menu_area = new ImagePanel();
+		menu_area.setSize(600,400);
+//		menu_area.setLocation(0,0);
+		menu_area.setLocation(width/2-menu_area.getWidth()/2,height/2-menu_area.getHeight()/2);
+		menu_area.setBackground(new Color(255,0,0,200));
+		menu_area.setLayout(null);
+		Pizza p = pizzas.get(0);
+		ImagePanel pizP = new ImagePanel();
+		pizP.setLayout(null);
+		pizP.setSize(menu_area.getWidth(),HEIGHT_PIZZA);
+		pizP.setLocation(0,0);
+		pizP.setBackground(new Color(0,0,0,0));
+		pizP.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				pizP.setBackground(new Color(0,0,0,0));
+				frame.repaint();
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				pizP.setBackground(new Color(0,255,255));
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		JLabel title = new JLabel();
+		title.setText(p.getTitle());
+		title.setBounds(0,0,50,HEIGHT_PIZZA);
+		
+		JLabel size = new JLabel();
+		size.setText(p.getSize());
+		size.setBounds(50,0,50,HEIGHT_PIZZA);
+		
+		JLabel description = new JLabel();
+		description.setText(p.getDecription());
+		description.setBounds(100,0,50,HEIGHT_PIZZA);
+		
+		JLabel available = new JLabel();
+		available.setText(Boolean.toString(p.isAvailable()));
+		available.setBounds(150,0,50,HEIGHT_PIZZA);
+		
+		JLabel id = new JLabel();
+		id.setText(Integer.toString(p.getId()));
+		id.setBounds(200,0,50,HEIGHT_PIZZA);
+		
+		pizP.add(title);
+		pizP.add(size);
+		pizP.add(description);
+		pizP.add(available);
+		pizP.add(id);
+		menu_area.add(pizP);
+		
+		next_button = new ImagePanel();
+		next_button.setSize(50,50);
+		next_button.setLocation(750,250);
+		next_button.setBackground(Color.BLACK);
+		next_button.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				curPizza++;
+				curPizza%=pizzas.size();
+				title.setText(pizzas.get(curPizza).getTitle());
+				size.setText(pizzas.get(curPizza).getSize());
+				description.setText(pizzas.get(curPizza).getDecription());
+				available.setText(Boolean.toString(pizzas.get(curPizza).isAvailable()));
+				id.setText(Integer.toString(pizzas.get(curPizza).getId()));
+				frame.repaint();
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
+		menuPlaceP.add(next_button);
+		menuPlaceP.add(menu_area);
+		menuPlaceP.add(menu_back);
+		frame.repaint();
+	}
+	public static void addPizza(Pizza p) {
+		
+//		menu_area.add(pizP);
+		pizzas.add(p);
+//		frame.repaint();
+	}
+	public static void deletePizzas() {
+		pizzas.clear();
+//		menu_area.removeAll();
+		frame.repaint();
+	}
+	public static void initUser() {
+		
+		userPlaceP = new ImagePanel();
+		userPlaceP.setBounds(0,0,width,height);
+		userPlaceP.setImage(PhotosDB.getPhoto("main_bg"));
+		userPlaceP.setLayout(null);
+		
+		userPlace_back = new ImagePanel();
+		userPlace_back.setBounds(0,0,back_width,back_height);
+		userPlace_back.setImage(PhotosDB.getPhoto("back"));
+		userPlace_back.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				setContent(glP);
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		menu_area_userPlace = new ImagePanel();
+		menu_area_userPlace.setSize(300,400);
+		menu_area_userPlace.setLocation(width/2-menu_area_userPlace.getWidth()/2,height/2-menu_area_userPlace.getHeight()/2);
+		menu_area_userPlace.setBackground(new Color(255,0,0,200));
+		menu_area_userPlace.setLayout(null);
+		
+		button_seeMenu  = new ImagePanel();
+		{
+			int margin_left=10;
+			int margin_top=10;
+			int margin_right=10;
+			int widthAutho=menu_area_userPlace.getWidth()-margin_left-margin_right;
+			int heightAutho=50;
+			seeMenu_label = new JLabel("see_menu");
+			seeMenu_label.setBounds(10,5,90,20);
+			button_seeMenu.add(seeMenu_label);
+			button_seeMenu.setBounds(margin_left,margin_top,widthAutho,heightAutho);
+			button_seeMenu.setBackground(new Color(0,255,0));
+			button_seeMenu.addMouseListener(new MouseListener() {
+				
+				@Override
+				public void mouseReleased(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mousePressed(MouseEvent e) {
+					button_seeMenu.setBackground(new Color(0,255,0));
+//					setContent(menuPlaceP);
+					client.askMenu();
+					
+					
+				}
+				
+				@Override
+				public void mouseExited(MouseEvent e) {
+					// TODO Auto-generated method stub
+					button_seeMenu.setBackground(new Color(0,255,0));
+				}
+				
+				@Override
+				public void mouseEntered(MouseEvent e) {
+					// TODO Auto-generated method stub
+					button_seeMenu.setBackground(new Color(0,255,255));
+				}
+				
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+			});
+		}
+		
+		
+		button_basket = new ImagePanel();
+		{
+			int margin_left=10;
+			int margin_top=10;
+			int margin_right=10;
+			int widthAutho=menu_area_userPlace.getWidth()-margin_left-margin_right;
+			int heightAutho=50;
+			basket_label = new JLabel("basket");
+			basket_label.setBounds(10,5,90,20);
+			button_basket.add(basket_label);
+			button_basket.setBounds(margin_left,2*margin_top+heightAutho,widthAutho,heightAutho);
+			button_basket.setBackground(new Color(0,255,0));
+			button_basket.addMouseListener(new MouseListener() {
+				
+				@Override
+				public void mouseReleased(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mousePressed(MouseEvent e) {
+					button_basket.setBackground(new Color(0,255,0));
+					//setContent(addToMenuP);
+					
+				}
+				
+				@Override
+				public void mouseExited(MouseEvent e) {
+					// TODO Auto-generated method stub
+					button_basket.setBackground(new Color(0,255,0));
+				}
+				
+				@Override
+				public void mouseEntered(MouseEvent e) {
+					// TODO Auto-generated method stub
+					button_basket.setBackground(new Color(0,255,255));
+				}
+				
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+			});
+		}
+		
+		
+		
+		menu_area_userPlace.add(button_basket);
+		menu_area_userPlace.add(button_seeMenu);
+		userPlaceP.add(menu_area_userPlace);
+		userPlaceP.add(userPlace_back);
+	}
+	
 	public static void workPlace() {
 		initAddToMenuArea();
 		workPlaceP = new ImagePanel();
@@ -157,49 +517,103 @@ public class GUI {
 		menu_area_workPlace.setLayout(null);
 		
 		button_addToMenu  = new ImagePanel();
-		int margin_left=10;
-		int margin_top=10;
-		int margin_right=10;
-		int widthAutho=menu_area_workPlace.getWidth()-margin_left-margin_right;
-		int heightAutho=50;
-		add_toMenu_label = new JLabel("add_to_menu");
-		add_toMenu_label.setBounds(10,5,90,20);
-		button_addToMenu.add(add_toMenu_label);
-		button_addToMenu.setBounds(margin_left,margin_top,widthAutho,heightAutho);
-		button_addToMenu.setBackground(new Color(0,255,0));
-		button_addToMenu.addMouseListener(new MouseListener() {
-			
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
+		{
+			int margin_left=10;
+			int margin_top=10;
+			int margin_right=10;
+			int widthAutho=menu_area_workPlace.getWidth()-margin_left-margin_right;
+			int heightAutho=50;
+			add_toMenu_label = new JLabel("add_to_menu");
+			add_toMenu_label.setBounds(10,5,90,20);
+			button_addToMenu.add(add_toMenu_label);
+			button_addToMenu.setBounds(margin_left,margin_top,widthAutho,heightAutho);
+			button_addToMenu.setBackground(new Color(0,255,0));
+			button_addToMenu.addMouseListener(new MouseListener() {
 				
-			}
-			
-			@Override
-			public void mousePressed(MouseEvent e) {
-				button_addToMenu.setBackground(new Color(0,255,0));
-				setContent(addToMenuP);
+				@Override
+				public void mouseReleased(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
 				
-			}
-			
-			@Override
-			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-				button_addToMenu.setBackground(new Color(0,255,0));
-			}
-			
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-				button_addToMenu.setBackground(new Color(0,255,255));
-			}
-			
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				// TODO Auto-generated method stub
+				@Override
+				public void mousePressed(MouseEvent e) {
+					button_addToMenu.setBackground(new Color(0,255,0));
+					setContent(addToMenuP);
+					
+				}
 				
-			}
-		});
+				@Override
+				public void mouseExited(MouseEvent e) {
+					// TODO Auto-generated method stub
+					button_addToMenu.setBackground(new Color(0,255,0));
+				}
+				
+				@Override
+				public void mouseEntered(MouseEvent e) {
+					// TODO Auto-generated method stub
+					button_addToMenu.setBackground(new Color(0,255,255));
+				}
+				
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+			});
+		}
+		
+		
+		button_manageOrders = new ImagePanel();
+		{
+			int margin_left=10;
+			int margin_top=10;
+			int margin_right=10;
+			int widthAutho=menu_area_workPlace.getWidth()-margin_left-margin_right;
+			int heightAutho=50;
+			manageOrders_label = new JLabel("manage_orders");
+			manageOrders_label.setBounds(10,5,90,20);
+			button_manageOrders.add(manageOrders_label);
+			button_manageOrders.setBounds(margin_left,2*margin_top+heightAutho,widthAutho,heightAutho);
+			button_manageOrders.setBackground(new Color(0,255,0));
+			button_manageOrders.addMouseListener(new MouseListener() {
+				
+				@Override
+				public void mouseReleased(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void mousePressed(MouseEvent e) {
+					button_manageOrders.setBackground(new Color(0,255,0));
+					//setContent(addToMenuP);
+					
+				}
+				
+				@Override
+				public void mouseExited(MouseEvent e) {
+					// TODO Auto-generated method stub
+					button_manageOrders.setBackground(new Color(0,255,0));
+				}
+				
+				@Override
+				public void mouseEntered(MouseEvent e) {
+					// TODO Auto-generated method stub
+					button_manageOrders.setBackground(new Color(0,255,255));
+				}
+				
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					// TODO Auto-generated method stub
+					
+				}
+			});
+		}
+		
+		
+		
+		menu_area_workPlace.add(button_manageOrders);
 		menu_area_workPlace.add(button_addToMenu);
 		workPlaceP.add(menu_area_workPlace);
 		workPlaceP.add(workPlace_back);
@@ -385,6 +799,39 @@ public class GUI {
 		gl_user.setSize(100,50);
 		gl_user.setLocation(width/2 - gl_user.getWidth()-50,height/2 - gl_user.getHeight()/2);
 		gl_user.setImage(PhotosDB.getPhoto("user"));
+		gl_user.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				setContent(userPlaceP);
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
 		
 		user_label = new JLabel("User");
 		user_label.setFont(new Font("Serif", Font.BOLD, 12));

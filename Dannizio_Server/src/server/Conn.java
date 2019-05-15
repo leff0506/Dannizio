@@ -54,6 +54,29 @@ public class Conn implements Runnable{
 			sign_up(parser);
 		}else if(parser.getName().equals("add_to_menu")) {
 			addToMenu(parser);
+		}else if(parser.getName().equals("get_menu")) {
+			getMenu();
+		}
+	}
+	private void getMenu() {
+		try {
+			ResultSet res = dbh.getSt().executeQuery("SELECT * from `menu`");
+			String answer="";
+			while(res.next()) {
+				answer="";
+				answer+="add_to_menu{";
+				answer+="id:"+res.getInt("id")+",";
+				answer+="title:"+res.getString("title")+",";
+				answer+="decription:"+res.getString("description")+",";
+				answer+="size:"+res.getString("size")+",";
+				answer+="available:"+res.getBoolean("available");
+				answer+="}";
+				send(answer);
+			}
+			send("end_menu");
+		} catch (SQLException e1) {
+			send("Error");
+			e1.printStackTrace();
 		}
 	}
 	private void addToMenu(XMLParser parser) {
