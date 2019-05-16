@@ -62,7 +62,8 @@ public class Client {
 		if(parser.getName().equals("logged")) {
 			GUI.workPlace();
 		}else if(parser.getName().equals("add_to_menu")) {
-			Pizza p = new Pizza(parser.get("title"),parser.get("size"),parser.get("description"),(parser.get("available").equals("true")?true:false),Integer.parseInt(parser.get("id")));
+			
+			Pizza p = new Pizza(parser.get("title"),parser.get("size"),parser.get("description"),(parser.get("available").equals("true")?true:false),Integer.parseInt(parser.get("id")),Double.parseDouble(parser.get("price")));
 			GUI.addPizza(p);
 		}else if(parser.getName().equals("end_menu")) {
 			GUI.initMenuArea();

@@ -60,7 +60,7 @@ public class Conn implements Runnable{
 	}
 	private void getMenu() {
 		try {
-			ResultSet res = dbh.getSt().executeQuery("SELECT * from `menu`");
+			ResultSet res = dbh.getSt().executeQuery("SELECT * from `menu` where available = true");
 			String answer="";
 			while(res.next()) {
 				answer="";
@@ -69,7 +69,8 @@ public class Conn implements Runnable{
 				answer+="title:"+res.getString("title")+",";
 				answer+="decription:"+res.getString("description")+",";
 				answer+="size:"+res.getString("size")+",";
-				answer+="available:"+res.getBoolean("available");
+				answer+="available:"+res.getBoolean("available")+",";
+				answer+="price:"+res.getDouble("price");
 				answer+="}";
 				send(answer);
 			}

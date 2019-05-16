@@ -90,11 +90,38 @@ public class GUI {
 	public static ImagePanel menuPlaceP;
 	private static ImagePanel menu_back;
 	private static ImagePanel menu_area;
+	private static ImagePanel add_to_basket_button;
 	public static ArrayList<Pizza> pizzas=new ArrayList<>();
 	private static final int HEIGHT_PIZZA=150;
-	private static JScrollPane menu_area_s;
 	private static int curPizza=0;
-	private static ImagePanel next_button;
+	private static ImagePanel next_button_menu;
+	private static ImagePanel prev_button_menu;
+	private static ImagePanel pizP_menu;
+	private static JLabel title_menu;
+	private static JLabel size_menu;
+	private static JLabel description_menu;
+	private static JLabel available_menu;
+	private static JLabel id_menu;
+	private static JLabel price_menu;
+	private static JLabel log_menu;
+	//
+	
+	//basket place
+	public static ArrayList<Pizza> basket=new ArrayList<>();
+	public static ImagePanel basketPlaceP;
+	private static ImagePanel basket_back;
+	private static ImagePanel basket_area;
+	private static int curPizzaB=0;
+	private static ImagePanel next_button_basket;
+	private static ImagePanel prev_button_basket;
+	private static ImagePanel pizP_basket;
+	private static JLabel title_basket;
+	private static JLabel size_basket;
+	private static JLabel description_basket;
+	private static JLabel available_basket;
+	private static JLabel id_basket;
+	private static JLabel price_basket;
+	private static JLabel log_basket;
 	//
 	
 	//worker place
@@ -140,6 +167,7 @@ public class GUI {
 		
 	}
 	public static void initMenuArea() {
+		
 		menuPlaceP = new ImagePanel();
 		menuPlaceP.setBounds(0,0,width,height);
 		menuPlaceP.setImage(PhotosDB.getPhoto("main_bg"));
@@ -182,7 +210,11 @@ public class GUI {
 			}
 		});
 		
-
+		log_menu= new JLabel("0"+"/"+Integer.toString(pizzas.size()));
+		log_menu.setSize(60,60);
+		log_menu.setLocation(width - log_menu.getWidth(),0);
+		log_menu.setForeground(Color.RED);
+		
 		menu_area = new ImagePanel();
 		menu_area.setSize(600,400);
 //		menu_area.setLocation(0,0);
@@ -190,12 +222,12 @@ public class GUI {
 		menu_area.setBackground(new Color(255,0,0,200));
 		menu_area.setLayout(null);
 		Pizza p = pizzas.get(0);
-		ImagePanel pizP = new ImagePanel();
-		pizP.setLayout(null);
-		pizP.setSize(menu_area.getWidth(),HEIGHT_PIZZA);
-		pizP.setLocation(0,0);
-		pizP.setBackground(new Color(0,0,0,0));
-		pizP.addMouseListener(new MouseListener() {
+		pizP_menu = new ImagePanel();
+		pizP_menu.setLayout(null);
+		pizP_menu.setSize(menu_area.getWidth(),HEIGHT_PIZZA);
+		pizP_menu.setLocation(0,0);
+		pizP_menu.setBackground(new Color(0,0,0,0));
+		pizP_menu.addMouseListener(new MouseListener() {
 			
 			@Override
 			public void mouseReleased(MouseEvent e) {
@@ -211,14 +243,14 @@ public class GUI {
 			
 			@Override
 			public void mouseExited(MouseEvent e) {
-				pizP.setBackground(new Color(0,0,0,0));
+				pizP_menu.setBackground(new Color(0,0,0,0));
 				frame.repaint();
 				
 			}
 			
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				pizP.setBackground(new Color(0,255,255));
+				pizP_menu.setBackground(new Color(0,255,255));
 				
 			}
 			
@@ -228,38 +260,43 @@ public class GUI {
 				
 			}
 		});
-		JLabel title = new JLabel();
-		title.setText(p.getTitle());
-		title.setBounds(0,0,50,HEIGHT_PIZZA);
+		title_menu = new JLabel();
+		title_menu.setText(p.getTitle());
+		title_menu.setBounds(0,0,50,HEIGHT_PIZZA);
 		
-		JLabel size = new JLabel();
-		size.setText(p.getSize());
-		size.setBounds(50,0,50,HEIGHT_PIZZA);
+		size_menu = new JLabel();
+		size_menu.setText(p.getSize());
+		size_menu.setBounds(50,0,50,HEIGHT_PIZZA);
 		
-		JLabel description = new JLabel();
-		description.setText(p.getDecription());
-		description.setBounds(100,0,50,HEIGHT_PIZZA);
+		description_menu = new JLabel();
+		description_menu.setText(p.getDecription());
+		description_menu.setBounds(100,0,50,HEIGHT_PIZZA);
 		
-		JLabel available = new JLabel();
-		available.setText(Boolean.toString(p.isAvailable()));
-		available.setBounds(150,0,50,HEIGHT_PIZZA);
+		available_menu = new JLabel();
+		available_menu.setText(Boolean.toString(p.isAvailable()));
+		available_menu.setBounds(150,0,50,HEIGHT_PIZZA);
 		
-		JLabel id = new JLabel();
-		id.setText(Integer.toString(p.getId()));
-		id.setBounds(200,0,50,HEIGHT_PIZZA);
+		id_menu = new JLabel();
+		id_menu.setText(Integer.toString(p.getId()));
+		id_menu.setBounds(200,0,50,HEIGHT_PIZZA);
 		
-		pizP.add(title);
-		pizP.add(size);
-		pizP.add(description);
-		pizP.add(available);
-		pizP.add(id);
-		menu_area.add(pizP);
+		price_menu= new JLabel();
+		price_menu.setText(Double.toString(p.getPrice()));
+		price_menu.setBounds(250,0,50,HEIGHT_PIZZA);
 		
-		next_button = new ImagePanel();
-		next_button.setSize(50,50);
-		next_button.setLocation(750,250);
-		next_button.setBackground(Color.BLACK);
-		next_button.addMouseListener(new MouseListener() {
+		pizP_menu.add(price_menu);
+		pizP_menu.add(title_menu);
+		pizP_menu.add(size_menu);
+		pizP_menu.add(description_menu);
+		pizP_menu.add(available_menu);
+		pizP_menu.add(id_menu);
+		
+		
+		add_to_basket_button = new ImagePanel();
+		add_to_basket_button.setImage(PhotosDB.getPhoto("submit"));
+		add_to_basket_button.setSize(80,50);
+		add_to_basket_button.setLocation(menu_area.getWidth()-add_to_basket_button.getWidth()-5, menu_area.getHeight()-add_to_basket_button.getHeight()-5);
+		add_to_basket_button.addMouseListener(new MouseListener() {
 			
 			@Override
 			public void mouseReleased(MouseEvent e) {
@@ -269,13 +306,58 @@ public class GUI {
 			
 			@Override
 			public void mousePressed(MouseEvent e) {
+				basket.add(pizzas.get(curPizza));
+				JOptionPane.showMessageDialog(null,"added");
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		menu_area.add(add_to_basket_button);
+		menu_area.add(pizP_menu);
+		
+		next_button_menu = new ImagePanel();
+		next_button_menu.setSize(50,50);
+		next_button_menu.setLocation(750,250);
+		next_button_menu.setBackground(Color.BLACK);
+		next_button_menu.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				if(pizzas.size()==0) {
+					return;
+				}
 				curPizza++;
 				curPizza%=pizzas.size();
-				title.setText(pizzas.get(curPizza).getTitle());
-				size.setText(pizzas.get(curPizza).getSize());
-				description.setText(pizzas.get(curPizza).getDecription());
-				available.setText(Boolean.toString(pizzas.get(curPizza).isAvailable()));
-				id.setText(Integer.toString(pizzas.get(curPizza).getId()));
+				title_menu.setText(pizzas.get(curPizza).getTitle());
+				size_menu.setText(pizzas.get(curPizza).getSize());
+				description_menu.setText(pizzas.get(curPizza).getDecription());
+				available_menu.setText(Boolean.toString(pizzas.get(curPizza).isAvailable()));
+				id_menu.setText(Integer.toString(pizzas.get(curPizza).getId()));
+				price_menu.setText(Double.toString(pizzas.get(curPizza).getPrice()));
+				log_menu.setText(Integer.toString(curPizza)+"/"+Integer.toString(pizzas.size()));
 				frame.repaint();
 				
 			}
@@ -298,10 +380,327 @@ public class GUI {
 				
 			}
 		});
-		
-		menuPlaceP.add(next_button);
+		prev_button_menu = new ImagePanel();
+		prev_button_menu.setSize(50,50);
+		prev_button_menu.setLocation(85,250);
+		prev_button_menu.setBackground(Color.BLACK);
+		prev_button_menu.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				if(pizzas.size()==0) {
+					return;
+				}
+				curPizza--;
+				curPizza=(curPizza +pizzas.size())%pizzas.size();
+				title_menu.setText(pizzas.get(curPizza).getTitle());
+				size_menu.setText(pizzas.get(curPizza).getSize());
+				description_menu.setText(pizzas.get(curPizza).getDecription());
+				available_menu.setText(Boolean.toString(pizzas.get(curPizza).isAvailable()));
+				id_menu.setText(Integer.toString(pizzas.get(curPizza).getId()));
+				price_menu.setText(Double.toString(pizzas.get(curPizza).getPrice()));
+				log_menu.setText(Integer.toString(curPizza)+"/"+Integer.toString(pizzas.size()));
+				frame.repaint();
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		menuPlaceP.add(log_menu);
+		menuPlaceP.add(prev_button_menu);
+		menuPlaceP.add(next_button_menu);
 		menuPlaceP.add(menu_area);
 		menuPlaceP.add(menu_back);
+		frame.repaint();
+	}
+	public static void resetBasket() {
+		if(basket.size()!=0) {
+			curPizzaB=0;
+			title_basket.setText(basket.get(curPizzaB).getTitle());
+			size_basket.setText(basket.get(curPizzaB).getSize());
+			description_basket.setText(basket.get(curPizzaB).getDecription());
+			available_basket.setText(Boolean.toString(basket.get(curPizzaB).isAvailable()));
+			id_basket.setText(Integer.toString(basket.get(curPizzaB).getId()));
+			price_basket.setText(Double.toString(basket.get(curPizzaB).getPrice()));
+			log_basket.setText("0"+"/"+Integer.toString(basket.size()));
+			frame.repaint();
+		}
+		
+	}
+	public static void initBasketArea() {
+		basketPlaceP = new ImagePanel();
+		basketPlaceP.setBounds(0,0,width,height);
+		basketPlaceP.setImage(PhotosDB.getPhoto("main_bg"));
+		basketPlaceP.setLayout(null);
+		
+		basket_back = new ImagePanel();
+		basket_back.setBounds(0,0,back_width,back_height);
+		basket_back.setImage(PhotosDB.getPhoto("back"));
+		
+		basket_back.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				setContent(userPlaceP);
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
+		log_basket= new JLabel("0/0");
+		log_basket.setSize(60,60);
+		log_basket.setLocation(width - log_basket.getWidth(),0);
+		log_basket.setForeground(Color.RED);
+		
+		basket_area = new ImagePanel();
+		basket_area.setSize(600,400);
+//		menu_area.setLocation(0,0);
+		basket_area.setLocation(width/2-basket_area.getWidth()/2,height/2-basket_area.getHeight()/2);
+		basket_area.setBackground(new Color(255,0,0,200));
+		basket_area.setLayout(null);
+		Pizza p = null ;
+		if(basket.size()!=0) {
+			p= basket.get(0);
+		}
+		
+		pizP_basket = new ImagePanel();
+		pizP_basket.setLayout(null);
+		pizP_basket.setSize(basket_area.getWidth(),HEIGHT_PIZZA);
+		pizP_basket.setLocation(0,0);
+		pizP_basket.setBackground(new Color(0,0,0,0));
+		pizP_basket.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				pizP_basket.setBackground(new Color(0,0,0,0));
+				frame.repaint();
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				pizP_basket.setBackground(new Color(0,255,255));
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		title_basket = new JLabel();
+		if(basket.size()!=0) {
+			title_basket.setText(p.getTitle());
+		}
+
+		title_basket.setBounds(0,0,50,HEIGHT_PIZZA);
+		
+		size_basket = new JLabel();
+		
+		if(basket.size()!=0) {
+			size_basket.setText(p.getSize());
+		}
+		size_basket.setBounds(50,0,50,HEIGHT_PIZZA);
+		
+		description_basket = new JLabel();
+		if(basket.size()!=0) {
+			description_basket.setText(p.getDecription());
+		}
+		
+		description_basket.setBounds(100,0,50,HEIGHT_PIZZA);
+		
+		available_basket = new JLabel();
+		if(basket.size()!=0) {
+			available_basket.setText(Boolean.toString(p.isAvailable()));
+		}
+		
+		available_basket.setBounds(150,0,50,HEIGHT_PIZZA);
+		
+		id_basket = new JLabel();
+		
+		if(basket.size()!=0) {
+			id_basket.setText(Integer.toString(p.getId()));
+		}
+		id_basket.setBounds(200,0,50,HEIGHT_PIZZA);
+		
+		
+		price_basket= new JLabel();
+		if(basket.size()!=0) {
+			price_basket.setText(Double.toString(p.getPrice()));
+		}
+		
+		price_basket.setBounds(250,0,50,HEIGHT_PIZZA);
+		
+		pizP_basket.add(price_basket);
+		pizP_basket.add(title_basket);
+		pizP_basket.add(size_basket);
+		pizP_basket.add(description_basket);
+		pizP_basket.add(available_basket);
+		pizP_basket.add(id_basket);
+		
+		
+		
+		basket_area.add(pizP_basket);
+		
+		next_button_basket = new ImagePanel();
+		next_button_basket.setSize(50,50);
+		next_button_basket.setLocation(750,250);
+		next_button_basket.setBackground(Color.BLACK);
+		next_button_basket.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				if(basket.size()==0) {
+					return;
+				}
+				curPizzaB++;
+				curPizzaB%=basket.size();
+				title_basket.setText(basket.get(curPizzaB).getTitle());
+				size_basket.setText(basket.get(curPizzaB).getSize());
+				description_basket.setText(basket.get(curPizzaB).getDecription());
+				available_basket.setText(Boolean.toString(basket.get(curPizzaB).isAvailable()));
+				id_basket.setText(Integer.toString(basket.get(curPizzaB).getId()));
+				price_basket.setText(Double.toString(basket.get(curPizzaB).getPrice()));
+				log_basket.setText(Integer.toString(curPizzaB)+"/"+Integer.toString(basket.size()));
+				frame.repaint();
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		prev_button_basket = new ImagePanel();
+		prev_button_basket.setSize(50,50);
+		prev_button_basket.setLocation(85,250);
+		prev_button_basket.setBackground(Color.BLACK);
+		prev_button_basket.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				if(basket.size()==0) {
+					return;
+				}
+				curPizzaB--;
+				curPizzaB=(curPizzaB +basket.size())%basket.size();
+				title_basket.setText(basket.get(curPizzaB).getTitle());
+				size_basket.setText(basket.get(curPizzaB).getSize());
+				description_basket.setText(basket.get(curPizzaB).getDecription());
+				available_basket.setText(Boolean.toString(basket.get(curPizzaB).isAvailable()));
+				id_basket.setText(Integer.toString(basket.get(curPizzaB).getId()));
+				price_basket.setText(Double.toString(basket.get(curPizzaB).getPrice()));
+				log_basket.setText(Integer.toString(curPizzaB)+"/"+Integer.toString(basket.size()));
+				frame.repaint();
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		basketPlaceP.add(log_basket);
+		basketPlaceP.add(prev_button_basket);
+		basketPlaceP.add(next_button_basket);
+		basketPlaceP.add(basket_area);
+		basketPlaceP.add(basket_back);
 		frame.repaint();
 	}
 	public static void addPizza(Pizza p) {
@@ -316,7 +715,7 @@ public class GUI {
 		frame.repaint();
 	}
 	public static void initUser() {
-		
+		initBasketArea();
 		userPlaceP = new ImagePanel();
 		userPlaceP.setBounds(0,0,width,height);
 		userPlaceP.setImage(PhotosDB.getPhoto("main_bg"));
@@ -387,6 +786,7 @@ public class GUI {
 				public void mousePressed(MouseEvent e) {
 					button_seeMenu.setBackground(new Color(0,255,0));
 //					setContent(menuPlaceP);
+					curPizza=0;
 					client.askMenu();
 					
 					
@@ -436,7 +836,8 @@ public class GUI {
 				@Override
 				public void mousePressed(MouseEvent e) {
 					button_basket.setBackground(new Color(0,255,0));
-					//setContent(addToMenuP);
+					resetBasket();
+					setContent(basketPlaceP);
 					
 				}
 				
